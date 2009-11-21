@@ -35,7 +35,7 @@ except:
     from distutils.core import setup
 
 setup(name='wsgilog',
-      version='0.1',
+      version='0.2',
       description='''WSGI logging and event reporting middleware.''',
       long_description='''Supports logging events in WSGI applications to
 STDOUT, time rotated log files, email, syslog, and web servers. Also
@@ -51,12 +51,12 @@ def app(environ, start_response):
     print 'STDOUT is logged.'
     environ['wsgilog.logger'].info('This information is logged.')
     # Exception will be logged and sent to the browser formatted as HTML.
-    raise Exception()  
+    raise Exception()
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
     http = make_server('', 8080, app)
-    http.serve_forever()       
+    http.serve_forever()
 ''',
       author='L. C. Rees',
       author_email='lcrees@gmail.com',

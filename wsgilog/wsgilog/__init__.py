@@ -1,4 +1,4 @@
-# Copyright (c) 2007 L. C. Rees.  All rights reserved.
+# Copyright (c) 2007-2009 L. C. Rees.  All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -26,6 +26,7 @@
 
 '''WSGI logging and event reporting middleware.'''
 
+import pdb
 import sys
 import logging
 from cgitb import html
@@ -45,7 +46,7 @@ LOGGERID = 'wsgilog.logger'
 # Current proposed 'environ' key signalling no middleware exception handling
 THROWERR = 'x-wsgiorg.throw_errors'
 # HTTP error messages
-HTTPMSG = '500 Internal error'
+HTTPMSG = '500 Internal Error'
 ERRORMSG = 'Server got itself in trouble'
 # Default log formats
 DATEFORMAT = '%a, %d %b %Y %H:%M:%S'
@@ -53,8 +54,7 @@ LOGFORMAT = '%(name)s: %(asctime)s %(levelname)-4s %(message)s'
 
 def _errapp(environ, start_response):
     '''Default error handling WSGI application.'''
-    start_response(HTTPMSG, [('Content-type', 'text/plain')],
-        exc_info=sys.exc_info())
+    start_response(HTTPMSG, [('Content-type', 'text/plain')], sys.exc_info())
     return [ERRORMSG]    
 
 def log(**kw):
@@ -64,7 +64,7 @@ def log(**kw):
     return decorator
 
 
-class LogIO(object):
+class LogStdout(object):
 
     '''File-like object for sending stdout output to a logger.'''    
 
@@ -156,9 +156,11 @@ class WsgiLog(object):
             assert self.logger.handlers, 'At least one logging handler must be configured'   
             # Redirect STDOUT to the logger
             if 'toprint' in kw:
-                sys.stdout = LogIO(self.logger,
+                sys.stdout = LogStdout(self.logger,
                     # Sets log level STDOUT is displayed under
                     kw.get('prnlevel', logging.DEBUG))
+        # Flag for turning on PDB in situ
+        self.debug = kw.get('debug', False)
         # Flag for sending HTML-formatted exception tracebacks to the browser
         self.tohtml = kw.get('tohtml', False)
         # Write HTML-formatted exception tracebacks to a file if provided
@@ -183,6 +185,8 @@ class WsgiLog(object):
         '''Exception catcher.'''
         # Log exception
         if self.log: self.logger.exception(self.message)
+        # Debug
+        if self.debug: pdb.pm()
         # Write HTML-formatted exception tracebacks to a file
         if self.htmlfile is not None:
             open(self.htmlfile, 'wb').write(html(sys.exc_info()))
