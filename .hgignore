@@ -1,14 +1,13 @@
-syntax: glob
-
+syntax:glob
 *.pyc
+*.egg-info
 *~
-.DS_Store
-*.pyo
-syntax: glob
+.figleaf
+.coverage
+build/
+dist/
 
 syntax: glob
-build
+.project
 syntax: glob
-dist
-syntax: glob
-*.egg-info
+.pydevproject
