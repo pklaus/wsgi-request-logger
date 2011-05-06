@@ -1,4 +1,4 @@
-# Copyright (c) 2007 L. C. Rees.  All rights reserved.
+# Copyright (c) 2011 L. C. Rees.  All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -24,10 +24,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-'''setup - setuptools based setup for wsgilog.'''
-
-import ez_setup
-ez_setup.use_setuptools()
+'''setup for wsgilog.'''
 
 try:
     from setuptools import setup
@@ -35,7 +32,7 @@ except:
     from distutils.core import setup
 
 setup(name='wsgilog',
-      version='0.2',
+      version='0.3',
       description='''WSGI logging and event reporting middleware.''',
       long_description='''Supports logging events in WSGI applications to
 STDOUT, time rotated log files, email, syslog, and web servers. Also
@@ -63,15 +60,18 @@ if __name__ == '__main__':
       license='BSD',
       packages = ['wsgilog'],
       zip_safe = True,
-      keywords='WSGI logging middleware',
-      classifiers=['Development Status :: 3 - Alpha',
-                    'Environment :: Web Environment',
-                    'License :: OSI Approved :: BSD License',
-                    'Natural Language :: English',
-                    'Operating System :: OS Independent',
-                    'Programming Language :: Python',
-                    'Topic :: System :: Monitoring',
-                    'Topic :: System :: Logging',
-                    'Topic :: Internet :: WWW/HTTP :: Site Management',
-                    'Topic :: Internet :: WWW/HTTP :: WSGI',
-                    'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware'])
+      keywords='WSGI logging middleware web http',
+      classifiers=[
+          'Development Status :: 4 - Beta',
+          'Environment :: Web Environment',
+          'License :: OSI Approved :: BSD License',
+          'Natural Language :: English',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python',
+          'Topic :: System :: Monitoring',
+          'Topic :: System :: Logging',
+          'Topic :: Internet :: WWW/HTTP :: Site Management',
+          'Topic :: Internet :: WWW/HTTP :: WSGI',
+          'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware'
+      ]
+)

@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2009 L. C. Rees.  All rights reserved.
+# Copyright (c) 2007-2011 L. C. Rees.  All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -30,7 +30,7 @@ import pdb
 import sys
 import logging
 from cgitb import html
-from logging.handlers import HTTPHandler, SysLogHandler 
+from logging.handlers import HTTPHandler, SysLogHandler
 from logging.handlers import TimedRotatingFileHandler, SMTPHandler
 
 __all__ = ['WsgiLog', 'log']
@@ -55,7 +55,7 @@ LOGFORMAT = '%(name)s: %(asctime)s %(levelname)-4s %(message)s'
 def _errapp(environ, start_response):
     '''Default error handling WSGI application.'''
     start_response(HTTPMSG, [('Content-type', 'text/plain')], sys.exc_info())
-    return [ERRORMSG]    
+    return [ERRORMSG]
 
 def log(**kw):
     '''Decorator for logging middleware.'''
@@ -66,7 +66,7 @@ def log(**kw):
 
 class LogStdout(object):
 
-    '''File-like object for sending stdout output to a logger.'''    
+    '''File-like object for sending stdout output to a logger.'''
 
     def __init__(self, logger, level=logging.DEBUG):
         # Set logger level
@@ -79,7 +79,7 @@ class LogStdout(object):
         elif level == logging.WARNING:
             self.logger = logger.warning
         elif level == logging.INFO:
-            self.logger = logger.info        
+            self.logger = logger.info
 
     def write(self, info):
         '''Writes non-whitespace strings to logger.'''
@@ -88,7 +88,7 @@ class LogStdout(object):
 
 class WsgiLog(object):
 
-    '''Class for WSGI logging and event recording middleware.'''    
+    '''Class for WSGI logging and event recording middleware.'''
 
     def __init__(self, application, **kw):
         self.application = application
@@ -98,7 +98,7 @@ class WsgiLog(object):
         self.log = kw.get('log', True)
         # Log if set
         if self.log:
-            # Log error message 
+            # Log error message
             self.message = kw.get('logmessage', ERRORMSG)
             # Individual logger for WSGI app with custom name 'logname'
             self.logger = logging.getLogger(kw.get('logname', LOGNAME))
@@ -144,7 +144,7 @@ class WsgiLog(object):
                     kw.get('httphost'),
                     # Web URL
                     kw.get('httpurl'),
-                    # HTTP method 
+                    # HTTP method
                     kw.get('httpmethod', 'GET')))
             # Log to syslog
             if 'tosyslog' in kw:
@@ -153,7 +153,7 @@ class WsgiLog(object):
                     kw.get('syshost', ('localhost', 514)),
                     # syslog user
                     kw.get('facility', 'LOG_USER')))
-            assert self.logger.handlers, 'At least one logging handler must be configured'   
+            assert self.logger.handlers, 'At least one logging handler must be configured'
             # Redirect STDOUT to the logger
             if 'toprint' in kw:
                 sys.stdout = LogStdout(self.logger,
@@ -165,7 +165,7 @@ class WsgiLog(object):
         self.tohtml = kw.get('tohtml', False)
         # Write HTML-formatted exception tracebacks to a file if provided
         self.htmlfile = kw.get('htmlfile')
-                
+
     def __call__(self, environ, start_response):
         # Make logger available to other WSGI apps/middlware
         if self.log: environ[LOGGERID] = self.logger

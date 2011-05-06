@@ -4,3 +4,11 @@ syntax: glob
 *~
 .DS_Store
 *.pyo
+syntax: glob
+
+syntax: glob
+build
+syntax: glob
+dist
+syntax: glob
+*.egg-info
