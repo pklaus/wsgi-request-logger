@@ -1,0 +1,33 @@
+syntax:glob
+*.pyc
+*.egg-info
+*~
+.DS_Store
+.figleaf
+.coverage
+build/
+dist/
+.project
+.pydevproject
+.git/
+.settings/
+*.DS_Store
+_FOSSIL_
+unfinished/
+src/
+static/
+media/
+*.orig
+
+syntax: regexp
+^bin/fabfile\.py$
+syntax: regexp
+^graphalchemy/tests/foo$
+syntax: regexp
+^graphalchemy/tests/foo3$
+syntax: regexp
+^profile$
+syntax: glob
+tox/*
+syntax: glob
+.tox/*
