@@ -2,12 +2,21 @@ syntax:glob
 *.pyc
 *.egg-info
 *~
+<<<<<<< local
 .DS_Store
+=======
+>>>>>>> other
 .figleaf
 .coverage
 build/
 dist/
+<<<<<<< local
+=======
+
+syntax: glob
+>>>>>>> other
 .project
+<<<<<<< local
 .pydevproject
 .git/
 .settings/
@@ -27,7 +36,11 @@ syntax: regexp
 ^graphalchemy/tests/foo3$
 syntax: regexp
 ^profile$
+=======
+>>>>>>> other
 syntax: glob
+<<<<<<< local
 tox/*
 syntax: glob
-.tox/*
+.tox/*=======
+.pydevproject>>>>>>> other
