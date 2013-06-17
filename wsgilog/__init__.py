@@ -196,3 +196,4 @@ class WsgiLog(object):
             return [html(sys.exc_info())]
         # Return error handler
         return self._errapp(environ, start_response)
+
