@@ -1,0 +1,15 @@
+dist/
+MANIFEST
+__pycache__
+*.pyc
+*.pyo
+*~
+.DS_Store
+build/
+dist/
+.project
+.pydevproject
+.settings/
+*.DS_Store
+*.swp
+
