@@ -16,7 +16,7 @@ Simply install this Python module via
 
 To add this plugin to your WSGI `application` and log to the file *access.log*, do:
 
-    from requestlogger import ApacheLogger
+    from requestlogger import WSGILogger, ApacheFormatter
     from logging.handlers import TimedRotatingFileHandler
     
     def application(environ, start_response):
@@ -28,13 +28,12 @@ To add this plugin to your WSGI `application` and log to the file *access.log*, 
         return [response_body]
     
     handlers = [ TimedRotatingFileHandler('access.log', 'd', 7) , ]
-    loggingapp = ApacheLogger(application, handlers)
+    loggingapp = WSGILogger(application, handlers, ApacheFormatter())
     
     if __name__ == '__main__':
         from wsgiref.simple_server import make_server
         http = make_server('', 8080, loggingapp)
         http.serve_forever()
-
 
 #### The Authors
 
