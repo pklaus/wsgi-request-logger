@@ -26,9 +26,6 @@ setup(name='wsgi-request-logger',
       zip_safe = True,
       platforms = 'any',
       keywords = 'WSGI Apache-like request logging',
-      requires = [
-          'bottle (>=0.10)'
-      ],
       classifiers = [
           'Development Status :: 3 - Alpha',
           'Operating System :: OS Independent',
