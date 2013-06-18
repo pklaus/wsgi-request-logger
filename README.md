@@ -4,7 +4,7 @@ This is a middleware which you can use to log requests to your WSGI based site.
 It's even imitating Apache's combined log format to allow you to use any of the
 many tools for Apache log file analysis.
 
-By making use of Python's Logger Facilities, you can easily log to STDOUT, time rotated log files, email, syslog, etc.
+By making use of Python's standard library logging facilities, you can easily set it up to log to STDOUT, time rotated log files, email, syslog, etc.
 
 #### Installation
 
@@ -14,7 +14,7 @@ Simply install this Python module via
 
 #### Usage
 
-To add this plugin to your WSGI `application` and log to the file *access.log*, do:
+To add this middleware to your WSGI `application` and log to the file *access.log*, do:
 
     from requestlogger import WSGILogger, ApacheFormatter
     from logging.handlers import TimedRotatingFileHandler
@@ -37,7 +37,7 @@ To add this plugin to your WSGI `application` and log to the file *access.log*, 
 
 #### The Authors
 
-This WSGI middlewre was originally developed under the name [wsgilog](https://pypi.python.org/pypi/wsgilog/) by  **L. C. Rees**.
+This WSGI middleware was originally developed under the name [wsgilog](https://pypi.python.org/pypi/wsgilog/) by  **L. C. Rees**.
 It was forked by **Philipp Klaus** in 2013 to build a WSGI middleware for request logging rather than exception handling and logging.  
 
 
@@ -55,6 +55,5 @@ This software, *wsgi-request-logger*, is published under a *3-clause BSD license
 
 * PyPI's [listing of wsgi-request-logger](https://pypi.python.org/pypi/wsgi-request-logger)
 * The source code for this Python module is [hosted on Github](https://github.com/pklaus/wsgi-request-logger).
-
-
-
+* A blog post with more background information and usage examples:
+  [wsgi-request-logger – Logging HTTP Requests With Any WSGI Web Application like Flask, Bottle or Django](https://blog.philippklaus.de/2013/06/wsgi-request-logger-logging-http-requests-with-any-wsgi-web-application-like-flask-bottle-or-django/)
