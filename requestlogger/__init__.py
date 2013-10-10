@@ -74,7 +74,9 @@ class ApacheFormatters(object):
         val['host'] = environ.get('REMOTE_ADDR', '')
         val['logname'] = '-'
         val['user'] = '-'
-        val['time'] = dt.now(tz=Local).strftime("%d/%b/%Y:%H:%M:%S %z")
+        date = dt.now(tz=Local)
+        month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][date.month - 1]
+        val['time'] = date.strftime("%d/{0}/%Y:%H:%M:%S %z".format(month))
         val['request'] = "{} {} {}".format(
               environ.get('REQUEST_METHOD', ''),
               environ.get('PATH_INFO', ''),
