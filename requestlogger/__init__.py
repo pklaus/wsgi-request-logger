@@ -49,7 +49,7 @@ class WSGILogger(object):
         return retval
 
     @staticmethod
-    def standard_formater(status_code, environ, content_length):
+    def standard_formatter(status_code, environ, content_length):
         return "{} {}".format(dt.now().isoformat(), status_code)
 
 def ApacheFormatter(with_response_time=True):
