@@ -19,6 +19,11 @@ from .timehacks import Local
 
 __all__ = ['WSGILogger', 'ApacheFormatter', 'log']
 
+try:
+    clock = time.perf_counter
+except AttributeError:
+    clock = time.time
+
 class WSGILogger(object):
     ''' This is the generalized WSGI middleware for any style request logging. '''
 
@@ -31,7 +36,7 @@ class WSGILogger(object):
         self.application = application
 
     def __call__(self, environ, start_response):
-        start = time.clock()
+        start = clock()
         status_codes = []
         content_lengths = []
         def custom_start_response(status, response_headers, exc_info=None):
@@ -42,7 +47,7 @@ class WSGILogger(object):
                     break
             return start_response(status, response_headers, exc_info)
         retval = self.application(environ, custom_start_response)
-        runtime = int((time.clock() - start) * 10**6)
+        runtime = int((clock() - start) * 10**6)
         content_length = content_lengths[0] if content_lengths else len(b''.join(retval))
         msg = self.formatter(status_codes[0], environ, content_length, rt_ms=runtime)
         self.logger.info(msg)
