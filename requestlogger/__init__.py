@@ -55,7 +55,7 @@ class WSGILogger(object):
 
     @staticmethod
     def standard_formatter(status_code, environ, content_length):
-        return "{} {}".format(dt.now().isoformat(), status_code)
+        return "{0} {1}".format(dt.now().isoformat(), status_code)
 
 def ApacheFormatter(with_response_time=True):
     ''' A factory that returns the wanted formatter '''
@@ -82,7 +82,7 @@ class ApacheFormatters(object):
         date = dt.now(tz=Local)
         month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][date.month - 1]
         val['time'] = date.strftime("%d/{0}/%Y:%H:%M:%S %z".format(month))
-        val['request'] = "{} {} {}".format(
+        val['request'] = "{0} {1} {2}".format(
               environ.get('REQUEST_METHOD', ''),
               environ.get('PATH_INFO', ''),
               environ.get('SERVER_PROTOCOL', '')
@@ -105,7 +105,7 @@ class ApacheFormatters(object):
           https://pypi.python.org/pypi/TinyLogAnalyzer
         """
         rt_ms = kw.get('rt_ms')
-        return ApacheFormatters.format_NCSA_log(*args) + " {}/{}".format(int(rt_ms/1000000), rt_ms)
+        return ApacheFormatters.format_NCSA_log(*args) + " {0}/{1}".format(int(rt_ms/1000000), rt_ms)
 
 def log(handlers, formatter=ApacheFormatter(), **kw):
     '''Decorator for logging middleware.'''
