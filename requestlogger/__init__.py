@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
+""""
 Apache-like combined logging for WSGI Web Applications.
 
 Homepage: https://github.com/pklaus/wsgi-request-logger
@@ -9,7 +9,7 @@ Copyright (c) 2013, Philipp Klaus. All rights reserved.
 Copyright (c) 2007-2011 L. C. Rees. All rights reserved.
 
 License: BSD (see LICENSE for details)
-"""
+"""""
 
 import time
 from datetime import datetime as dt
@@ -24,12 +24,14 @@ try:
 except AttributeError:
     clock = time.time
 
-class WSGILogger(object):
-    ''' This is the generalized WSGI middleware for any style request logging. '''
 
-    def __init__(self, application, handlers, formatter=None, **kw):
+class WSGILogger(object):
+    """ This is the generalized WSGI middleware for any style request logging. """
+
+    def __init__(self, application, handlers, formatter=None, propagate=True, **kw):
         self.formatter = formatter or WSGILogger.standard_formatter
         self.logger = logging.getLogger('requestlogger')
+        self.logger.propagate = propagate
         self.logger.setLevel(logging.DEBUG)
         for handler in handlers:
             self.logger.addHandler(handler)
@@ -39,6 +41,7 @@ class WSGILogger(object):
         start = clock()
         status_codes = []
         content_lengths = []
+
         def custom_start_response(status, response_headers, exc_info=None):
             status_codes.append(int(status.partition(' ')[0]))
             for name, value in response_headers:
@@ -57,15 +60,16 @@ class WSGILogger(object):
     def standard_formatter(status_code, environ, content_length):
         return "{0} {1}".format(dt.now().isoformat(), status_code)
 
+
 def ApacheFormatter(with_response_time=True):
-    ''' A factory that returns the wanted formatter '''
+    """ A factory that returns the wanted formatter """
     if with_response_time:
         return ApacheFormatters.format_with_response_time
     else:
         return ApacheFormatters.format_NCSA_log
 
-class ApacheFormatters(object):
 
+class ApacheFormatters(object):
     @staticmethod
     def format_NCSA_log(status_code, environ, content_length):
         """
@@ -107,8 +111,9 @@ class ApacheFormatters(object):
         rt_ms = kw.get('rt_ms')
         return ApacheFormatters.format_NCSA_log(*args) + " {0}/{1}".format(int(rt_ms/1000000), rt_ms)
 
+
 def log(handlers, formatter=ApacheFormatter(), **kw):
-    '''Decorator for logging middleware.'''
+    """Decorator for logging middleware."""
     def decorator(application):
         return WSGILogger(application, handlers, **kw)
     return decorator
