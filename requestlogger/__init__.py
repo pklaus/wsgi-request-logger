@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""""
+"""
 Apache-like combined logging for WSGI Web Applications.
 
 Homepage: https://github.com/pklaus/wsgi-request-logger
@@ -9,7 +9,7 @@ Copyright (c) 2013, Philipp Klaus. All rights reserved.
 Copyright (c) 2007-2011 L. C. Rees. All rights reserved.
 
 License: BSD (see LICENSE for details)
-"""""
+"""
 
 import time
 from datetime import datetime as dt
