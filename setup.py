@@ -15,7 +15,7 @@ except (IOError, ImportError):
     LDESC = ''
 
 setup(name='wsgi-request-logger',
-      version = '0.4.4',
+      version = '0.4.5',
       description = 'Apache-like combined logging for WSGI Web Applications',
       long_description = LDESC,
       author = 'Philipp Klaus',
