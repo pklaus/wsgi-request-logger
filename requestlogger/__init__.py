@@ -71,7 +71,7 @@ def ApacheFormatter(with_response_time=True):
 
 class ApacheFormatters(object):
     @staticmethod
-    def format_NCSA_log(status_code, environ, content_length):
+    def format_NCSA_log(status_code, environ, content_length, **kwargs):
         """
           Apache log format 'NCSA extended/combined log':
           "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\""
