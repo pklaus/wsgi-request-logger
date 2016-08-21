@@ -28,13 +28,14 @@ except AttributeError:
 class WSGILogger(object):
     """ This is the generalized WSGI middleware for any style request logging. """
 
-    def __init__(self, application, handlers, formatter=None, propagate=True, **kw):
+    def __init__(self, application, handlers, formatter=None, propagate=True, ip_header=None, **kwargs):
         self.formatter = formatter or WSGILogger.standard_formatter
         self.logger = logging.getLogger('requestlogger')
         self.logger.propagate = propagate
         self.logger.setLevel(logging.DEBUG)
         for handler in handlers:
             self.logger.addHandler(handler)
+        self.ip_header = ip_header
         self.application = application
 
     def __call__(self, environ, start_response):
@@ -52,7 +53,7 @@ class WSGILogger(object):
         retval = self.application(environ, custom_start_response)
         runtime = int((clock() - start) * 10**6)
         content_length = content_lengths[0] if content_lengths else len(b''.join(retval))
-        msg = self.formatter(status_codes[0], environ, content_length, rt_us=runtime)
+        msg = self.formatter(status_codes[0], environ, content_length, ip_header=self.ip_header, rt_us=runtime)
         self.logger.info(msg)
         return retval
 
@@ -80,7 +81,11 @@ class ApacheFormatters(object):
         
         # Let's collect log values
         val = dict()
-        val['host'] = environ.get('REMOTE_ADDR', '')
+        ip_header = kwargs.get('ip_header', None)
+        if ip_header:
+            val['host'] = environ.get('HTTP_X_FORWARDED_FOR', '')
+        else:
+            val['host'] = environ.get('REMOTE_ADDR', '')
         val['logname'] = '-'
         val['user'] = '-'
         date = dt.now(tz=Local)
@@ -102,19 +107,19 @@ class ApacheFormatters(object):
         return FORMAT.format(**val)
 
     @staticmethod
-    def format_with_response_time(*args, **kw):
+    def format_with_response_time(*args, **kwargs):
         """
-          The dict kw should contain 'rt_us', the response time in milliseconds.
+          The dict kwargs should contain 'rt_us', the response time in milliseconds.
           This is the format for TinyLogAnalyzer:
           https://pypi.python.org/pypi/TinyLogAnalyzer
         """
-        rt_us = kw.get('rt_us')
-        return ApacheFormatters.format_NCSA_log(*args) + " {0}/{1}".format(int(rt_us/1000000), rt_us)
+        rt_us = kwargs.get('rt_us')
+        return ApacheFormatters.format_NCSA_log(*args, **kwargs) + " {0}/{1}".format(int(rt_us/1000000), rt_us%1000000)
 
 
-def log(handlers, formatter=ApacheFormatter(), **kw):
+def log(handlers, formatter=ApacheFormatter(), **kwargs):
     """Decorator for logging middleware."""
     def decorator(application):
-        return WSGILogger(application, handlers, **kw)
+        return WSGILogger(application, handlers, **kwargs)
     return decorator
 
