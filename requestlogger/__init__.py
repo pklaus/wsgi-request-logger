@@ -99,6 +99,12 @@ class ApacheFormatters(object):
         # see http://docs.python.org/3/library/string.html#format-string-syntax
         FORMAT = '{host} {logname} {user} [{time}] "{request}" '
         FORMAT += '{status} {size} "{referer}" "{agent}"'
+
+        # make this module work nicely together with wsgi-request-id
+        val['request_id'] = environ.get('REQUEST_ID', None)
+        if val['request_id'] is not None:
+            FORMAT += ' {request_id} '
+
         return FORMAT.format(**val)
 
     @staticmethod
