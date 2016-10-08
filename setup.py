@@ -8,10 +8,17 @@ License: BSD (see LICENSE for details)
 """
 
 from distutils.core import setup
+import sys
+
 try:
     import pypandoc
-    LDESC = pypandoc.convert('README.md', 'rst')
+    LDESC = pypandoc.convert_file('README.md', 'rst', format='md')
 except (IOError, ImportError):
+    sys.stderr.write("pypandoc ist not available. Cannot convert the REAMDE from Markdown to rST.\n")
+    LDESC = ''
+except Exception as e:
+    sys.stderr.write("The conversion of the README to rST format failed with the following error:\n")
+    sys.stderr.write(str(e) + '\n')
     LDESC = ''
 
 setup(name='wsgi-request-logger',
