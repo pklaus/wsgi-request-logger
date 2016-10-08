@@ -22,7 +22,7 @@ except Exception as e:
     LDESC = ''
 
 setup(name='wsgi-request-logger',
-      version = '0.4.5',
+      version = '0.4.6',
       description = 'Apache-like combined logging for WSGI Web Applications',
       long_description = LDESC,
       author = 'Philipp Klaus',
