@@ -94,9 +94,11 @@ class ApacheFormatters(object):
         date = dt.now(tz=Local)
         month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][date.month - 1]
         val['time'] = date.strftime("%d/{0}/%Y:%H:%M:%S %z".format(month))
-        val['request'] = "{0} {1} {2}".format(
+        val['request'] = "{0} {1}{2}{3} {4}".format(
               environ.get('REQUEST_METHOD', ''),
               environ.get('PATH_INFO', ''),
+              '?' if environ.get('QUERY_STRING', '') else '',
+              environ.get('QUERY_STRING', ''),
               environ.get('SERVER_PROTOCOL', '')
             )
         val['status'] = status_code
