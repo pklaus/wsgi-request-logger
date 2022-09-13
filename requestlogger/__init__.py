@@ -37,29 +37,44 @@ class WSGILogger(object):
             self.logger.addHandler(handler)
         self.ip_header = ip_header
         self.application = application
+        self._status_code = ''
+        self._content_length = 0
 
     def __call__(self, environ, start_response):
         start = clock()
-        status_codes = []
-        content_lengths = []
 
-        def custom_start_response(status, response_headers, exc_info=None):
-            status_codes.append(int(status.partition(' ')[0]))
+        def _start_response(status, response_headers, exc_info=None):
+            self._status_code = status.split()[0]
+            self._content_length = 0
             for name, value in response_headers:
-                if name.lower() == 'content-length':
-                    content_lengths.append(int(value))
-                    break
-            return start_response(status, response_headers, exc_info)
-        retval = self.application(environ, custom_start_response)
+                    if name.lower() == 'content-length':
+                        self._content_length += int(value)
+                        break
+            return start_response(status, response_headers, exc_info) 
+
+        retval = self.application(environ, _start_response)
         runtime = int((clock() - start) * 10**6)
-        content_length = content_lengths[0] if content_lengths else len(b''.join(retval))
-        msg = self.formatter(status_codes[0], environ, content_length, ip_header=self.ip_header, rt_us=runtime)
+        msg = self.formatter(self._status_code, environ, self._content_length, ip_header=self.ip_header, rt_us=runtime)
         self.logger.info(msg)
         return retval
 
+
+
     @staticmethod
-    def standard_formatter(status_code, environ, content_length):
-        return "{0} {1}".format(dt.now().isoformat(), status_code)
+    def standard_formatter(status_code, environ, content_length, **kwargs):
+        _host = environ.get('REMOTE_ADDR', '')
+        _timestamp = dt.now(Local).strftime("%d/%b/%Y:%H:%M:%S %z")
+        _request = "{0} {1}{2}{3} {4}".format(
+              environ.get('REQUEST_METHOD', ''),
+              environ.get('PATH_INFO', ''),
+              '?' if environ.get('QUERY_STRING', '') else '',
+              environ.get('QUERY_STRING', ''),
+              environ.get('SERVER_PROTOCOL', '')
+            )
+        _status = status_code
+        _size = content_length
+        
+        return f'{_host} - - [{_timestamp}] "{_request}" {_status} {_size}' 
 
 
 def ApacheFormatter(with_response_time=True):

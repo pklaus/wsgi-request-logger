@@ -5,7 +5,7 @@
     Idea:   http://stackoverflow.com/a/2071364/183995
 """
 
-from datetime import datetime as dt, tzinfo, timedelta
+from datetime import tzinfo, timedelta
 import time as _time
 
 ZERO = timedelta(0)
